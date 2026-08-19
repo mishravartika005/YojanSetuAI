@@ -1,0 +1,2 @@
+export const getProfile = async (_request, _response) => { throw new Error('Profile access is not implemented.'); };
+export const updateProfile = async (_request, _response) => { throw new Error('Profile updates are not implemented.'); };

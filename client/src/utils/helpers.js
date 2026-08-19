@@ -1,0 +1,1 @@
+export function formatCurrency(value) { return value == null ? '' : new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(value); }

@@ -1,0 +1,1 @@
+export default function SchemeCard({ scheme }) { return <article><h2>{scheme?.name}</h2><p>{scheme?.description}</p></article>; }

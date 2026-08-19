@@ -1,0 +1,1 @@
+export const askQuestion = async (_request, _response) => { throw new Error('AI assistance is not implemented.'); };

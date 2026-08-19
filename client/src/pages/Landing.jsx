@@ -1,0 +1,2 @@
+import { Link } from 'react-router-dom';
+export default function Landing() { return <main><h1>YojanSetu AI</h1><p>Find government schemes relevant to your circumstances.</p><Link to="/register">Get started</Link></main>; }

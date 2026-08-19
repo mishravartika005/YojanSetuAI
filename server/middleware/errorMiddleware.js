@@ -1,0 +1,1 @@
+export function errorMiddleware(error, _request, response, _next) { response.status(error.statusCode || 500).json({ message: error.message || 'Server error' }); }

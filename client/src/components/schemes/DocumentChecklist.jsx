@@ -1,0 +1,1 @@
+export default function DocumentChecklist({ documents = [] }) { return <ul>{documents.map((document) => <li key={document}>{document}</li>)}</ul>; }

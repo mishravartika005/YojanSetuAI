@@ -1,0 +1,1 @@
+export const listApplications = async (_request, _response) => { throw new Error('Application tracking is not implemented.'); };

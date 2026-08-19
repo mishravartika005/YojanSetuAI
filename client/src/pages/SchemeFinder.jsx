@@ -1,0 +1,1 @@
+export default function SchemeFinder() { return <main><h1>Scheme finder</h1></main>; }

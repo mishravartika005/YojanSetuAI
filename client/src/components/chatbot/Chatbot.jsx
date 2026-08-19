@@ -1,0 +1,2 @@
+import ChatMessage from './ChatMessage';
+export default function Chatbot({ messages = [] }) { return <section aria-label="Scheme assistant">{messages.map((message, index) => <ChatMessage key={index} message={message} />)}</section>; }

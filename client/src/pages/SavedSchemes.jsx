@@ -1,0 +1,1 @@
+export default function SavedSchemes() { return <main><h1>Saved schemes</h1></main>; }

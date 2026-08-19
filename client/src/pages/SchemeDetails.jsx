@@ -1,0 +1,1 @@
+export default function SchemeDetails() { return <main><h1>Scheme details</h1></main>; }

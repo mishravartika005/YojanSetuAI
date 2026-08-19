@@ -1,0 +1,2 @@
+export const listSchemes = async (_request, _response) => { throw new Error('Scheme listing is not implemented.'); };
+export const getScheme = async (_request, _response) => { throw new Error('Scheme details are not implemented.'); };

@@ -1,0 +1,1 @@
+export default function Modal({ children, open = false }) { return open ? <div role="dialog">{children}</div> : null; }

@@ -1,0 +1,1 @@
+export default function EligibilityScore({ score }) { return <div aria-label="Eligibility score">{score ?? 'Not calculated'}</div>; }

@@ -1,0 +1,2 @@
+/** Calculates compatibility from a user profile and verified scheme criteria. */
+export function calculateEligibility(_profile, _criteria) { throw new Error('Eligibility calculation is not implemented.'); }

@@ -1,0 +1,1 @@
+export default function ChatMessage({ message }) { return <p>{message?.text || message}</p>; }

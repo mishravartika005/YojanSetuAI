@@ -1,0 +1,2 @@
+export const register = async (_request, _response) => { throw new Error('Registration is not implemented.'); };
+export const login = async (_request, _response) => { throw new Error('Login is not implemented.'); };
