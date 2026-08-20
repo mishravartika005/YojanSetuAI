@@ -4,16 +4,20 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "node --watch server.js",
-    "start": "node server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "seed:schemes": "node seed/seedSchemes.js"
   },
   "dependencies": {
-    "bcrypt": "latest",
+    "bcryptjs": "^3.0.3",
     "cors": "latest",
     "dotenv": "latest",
     "express": "latest",
-    "jsonwebtoken": "latest",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "latest",
     "yojansetu-ai": "file:.."
+  },
+  "devDependencies": {
+    "nodemon": "latest"
   }
 }
