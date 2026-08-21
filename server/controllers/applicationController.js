@@ -33,13 +33,16 @@ export async function createApplication(request, response) {
     });
   }
 
+  if (notes !== undefined && typeof notes !== 'string') {
+    return response.status(400).json({ success: false, message: 'Notes must be a string' });
+  }
+
   const application = await Application.create({
     user: userId,
     scheme: schemeId,
     status: appStatus,
     notes: typeof notes === 'string' ? notes.trim() : '',
     appliedAt: appStatus === 'applied' ? new Date() : null,
-    lastUpdatedAt: new Date(),
   });
 
   const populatedApp = await Application.findById(application._id).populate('scheme');
@@ -117,10 +120,12 @@ export async function updateApplication(request, response) {
   }
 
   if (notes !== undefined) {
-    application.notes = typeof notes === 'string' ? notes.trim() : notes;
+    if (typeof notes !== 'string') {
+      return response.status(400).json({ success: false, message: 'Notes must be a string' });
+    }
+    application.notes = notes.trim();
   }
 
-  application.lastUpdatedAt = new Date();
   await application.save();
 
   const populatedApp = await Application.findById(application._id).populate('scheme');

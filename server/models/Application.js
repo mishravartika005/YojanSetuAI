@@ -36,10 +36,6 @@ const applicationSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
-    lastUpdatedAt: {
-      type: Date,
-      default: Date.now,
-    },
   },
   {
     timestamps: true,
@@ -48,4 +44,4 @@ const applicationSchema = new mongoose.Schema(
 
 applicationSchema.index({ user: 1, scheme: 1 });
 
-export default mongoose.model('Application', applicationSchema);
+export default mongoose.model('Application', applicationSchema);

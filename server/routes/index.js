@@ -5,6 +5,7 @@ import schemeRoutes from './schemeRoutes.js';
 import recommendationRoutes from './recommendationRoutes.js';
 import savedSchemeRoutes from './savedSchemeRoutes.js';
 import applicationRoutes from './applicationRoutes.js';
+import aiRoutes from './aiRoutes.js';
 
 const router = Router();
 
@@ -14,6 +15,7 @@ router.use('/schemes', schemeRoutes);
 router.use('/recommendations', recommendationRoutes);
 router.use('/saved-schemes', savedSchemeRoutes);
 router.use('/applications', applicationRoutes);
+router.use('/ai', aiRoutes);
 
 router.get('/', (_request, response) => {
   response.json({
