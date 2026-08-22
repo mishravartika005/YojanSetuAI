@@ -14,7 +14,6 @@ export default function Footer() {
         <div>
           <h3 className="mb-3 text-sm font-semibold uppercase tracking-[0.15em] text-slate-500">Company</h3>
           <ul className="space-y-2 text-sm text-slate-600">
-            <li><Link to="/">About</Link></li>
             <li><Link to="/schemes">Find Schemes</Link></li>
             <li><Link to="/dashboard">Dashboard</Link></li>
           </ul>

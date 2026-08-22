@@ -1,13 +1,16 @@
 import api from './api';
 
 export const getProfile = async () => {
-  throw new Error('User profile API is not implemented yet.');
+  const response = await api.get('/users/profile');
+  return response.data;
 };
 
 export const updateProfile = async (profile) => {
-  throw new Error('Profile update API is not implemented yet.');
+  const response = await api.put('/users/profile', profile);
+  return response.data;
 };
 
 export const getSavedSchemes = async () => {
-  throw new Error('Saved scheme API is not implemented yet.');
+  const response = await api.get('/saved-schemes');
+  return response.data;
 };

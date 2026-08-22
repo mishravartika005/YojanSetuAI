@@ -1,4 +1,5 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+dotenv.config({ override: true });
 
 export const env = {
   port: Number(process.env.PORT || 5000),
@@ -9,3 +10,4 @@ export const env = {
   geminiModel: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
   aiTimeoutMs: Number(process.env.AI_TIMEOUT_MS || 15000),
 };
+console.log('DEBUG env: GEMINI_API_KEY length is', env.geminiApiKey ? env.geminiApiKey.length : 'undefined');

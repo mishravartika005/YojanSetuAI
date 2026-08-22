@@ -2,7 +2,11 @@ import { GoogleGenAI } from '@google/genai';
 import { env } from '../config/env.js';
 
 const DEFAULT_SYSTEM_PROMPT = [
-	'You explain verified government scheme information in simple, neutral language.',
+	'You explain verified government scheme information in simple, neutral language using short sentences.',
+	'Avoid unnecessary technical terms, and explain government terminology in simple words when needed.',
+	'Use bullet points to clearly separate important information.',
+	'Preserve complete factual accuracy, but avoid unnecessarily complicated words.',
+	'For Hindi and Marathi, write in natural, simple, colloquial language rather than a word-for-word translation.',
 	'Use only the supplied scheme context and user question.',
 	'Do not make or imply an official eligibility decision.',
 	'Say when the supplied information is insufficient and direct the user to the official source.',
@@ -63,6 +67,12 @@ export async function generateAIResponse(prompt, options = {}) {
 	const model = options.model || env.geminiModel;
 	const timeoutMs = options.timeoutMs || env.aiTimeoutMs;
 	const ai = new GoogleGenAI({ apiKey: env.geminiApiKey });
+	const languageInstruction = options.language === 'hi'
+		? ' You must respond only in Hindi (हिंदी).'
+		: options.language === 'mr'
+		? ' You must respond only in Marathi (मराठी).'
+		: ' You must respond only in English.';
+
 	let providerResponse;
 	try {
 		providerResponse = await Promise.race([
@@ -70,7 +80,7 @@ export async function generateAIResponse(prompt, options = {}) {
 				model,
 				contents: prompt.trim(),
 				config: {
-					systemInstruction: options.systemPrompt || DEFAULT_SYSTEM_PROMPT,
+					systemInstruction: (options.systemPrompt || DEFAULT_SYSTEM_PROMPT) + languageInstruction,
 					temperature: options.temperature ?? 0.2,
 				},
 			}),
@@ -80,6 +90,7 @@ export async function generateAIResponse(prompt, options = {}) {
 			}),
 		]);
 	} catch (error) {
+		console.error('Gemini API call failed:', error);
 		if (error instanceof AIServiceError) {
 			throw error;
 		}

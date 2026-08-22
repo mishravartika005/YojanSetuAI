@@ -180,23 +180,36 @@ export function evaluateEligibility(user = {}, scheme = {}) {
   // Calculate final score percentage (0-100)
   const score = Math.round((earnedScore / totalWeight) * 100);
 
-  let status = 'does_not_currently_match';
-  let statusLabel = 'Does not currently match';
+  const matched = [...matchedCriteria];
+  const unmatched = [];
+  const missing = [];
 
-  if (score >= 80) {
-    status = 'potentially_eligible';
-    statusLabel = 'Potentially eligible';
-  } else if (score >= 50) {
-    status = 'likely_match';
-    statusLabel = 'Likely match';
+  for (const criterion of unmatchedCriteria) {
+    if (criterion.includes('not specified in profile')) {
+      missing.push(criterion);
+    } else {
+      unmatched.push(criterion);
+    }
+  }
+
+  let status = 'likely_match';
+  let statusLabel = 'Likely match';
+
+  if (unmatched.length > 0) {
+    status = 'not_a_match';
+    statusLabel = 'Not a match';
+  } else if (missing.length > 0) {
+    status = 'needs_more_info';
+    statusLabel = 'Needs more information';
   }
 
   return {
     score,
     status,
     statusLabel,
-    matchedCriteria,
-    unmatchedCriteria,
+    matchedCriteria: matched,
+    unmatchedCriteria: unmatched,
+    missingCriteria: missing,
   };
 }
 

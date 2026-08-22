@@ -12,8 +12,20 @@ import SchemeDetails from './pages/SchemeDetails';
 import SavedSchemes from './pages/SavedSchemes';
 import Applications from './pages/Applications';
 import NotFound from './pages/NotFound';
+import useAuth from './hooks/useAuth';
+import Loader from './components/common/Loader';
 
 export default function App() {
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <Loader label="Restoring session..." />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
       <Navbar />

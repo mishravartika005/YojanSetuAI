@@ -1,21 +1,20 @@
 import api from './api';
 
 export const login = async (credentials) => {
-  if (!api) {
-    return Promise.resolve({ data: null });
-  }
-
-  throw new Error('Authentication API is not implemented yet.');
+  const response = await api.post('/auth/login', credentials);
+  return response.data;
 };
 
 export const register = async (details) => {
-  if (!api) {
-    return Promise.resolve({ data: null });
-  }
+  const response = await api.post('/auth/register', details);
+  return response.data;
+};
 
-  throw new Error('Registration API is not implemented yet.');
+export const getMe = async () => {
+  const response = await api.get('/auth/me');
+  return response.data;
 };
 
 export const logout = async () => {
-  throw new Error('Logout API is not implemented yet.');
+  localStorage.removeItem('token');
 };

@@ -104,6 +104,11 @@ const schemeSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    applicationMethod: {
+      type: String,
+      enum: ['ONLINE', 'OFFLINE', 'ONLINE_AND_OFFLINE', 'INFORMATION_ONLY'],
+      default: 'ONLINE',
+    },
     isActive: {
       type: Boolean,
       default: true,

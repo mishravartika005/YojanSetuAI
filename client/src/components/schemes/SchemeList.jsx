@@ -1,14 +1,16 @@
 import SchemeCard from './SchemeCard';
 import EmptyState from '../common/EmptyState';
 import { SearchX } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function SchemeList({ schemes = [] }) {
+  const { t } = useLanguage();
   if (!schemes.length) {
     return (
       <EmptyState
         icon={SearchX}
-        title="No schemes to display yet"
-        description="Verified scheme cards will appear here once the backend and eligibility engine are connected."
+        title={t('noSchemesToDisplay')}
+        description={t('noSchemesDesc')}
       />
     );
   }

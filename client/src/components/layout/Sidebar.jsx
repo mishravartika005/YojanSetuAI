@@ -1,21 +1,23 @@
 import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, UserRound, Search, Bookmark, ClipboardList } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 const items = [
-  { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
-  { label: 'Profile', to: '/profile', icon: UserRound },
-  { label: 'Find Schemes', to: '/schemes', icon: Search },
-  { label: 'Saved Schemes', to: '/saved', icon: Bookmark },
-  { label: 'Applications', to: '/applications', icon: ClipboardList },
+  { labelKey: 'dashboard', to: '/dashboard', icon: LayoutDashboard },
+  { labelKey: 'profile', to: '/profile', icon: UserRound },
+  { labelKey: 'findSchemes', to: '/schemes', icon: Search },
+  { labelKey: 'savedSchemes', to: '/saved', icon: Bookmark },
+  { labelKey: 'applications', to: '/applications', icon: ClipboardList },
 ];
 
 export default function Sidebar() {
+  const { t } = useLanguage();
   return (
     <aside aria-label="Sidebar" className="hidden w-64 shrink-0 lg:block">
       <div className="card-surface sticky top-24 rounded-2xl p-4">
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Navigation</p>
+        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{t('navigation')}</p>
         <nav className="space-y-2">
-          {items.map(({ label, to, icon: Icon }) => (
+          {items.map(({ labelKey, to, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
@@ -26,7 +28,7 @@ export default function Sidebar() {
               }
             >
               <Icon className="h-4 w-4" />
-              {label}
+              {t(labelKey)}
             </NavLink>
           ))}
         </nav>

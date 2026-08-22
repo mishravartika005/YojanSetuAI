@@ -22,3 +22,22 @@ export async function protect(request, response, next) {
     return response.status(401).json({ success: false, message: 'Not authorized' });
   }
 }
+
+export async function optionalProtect(request, response, next) {
+  const authorization = request.headers.authorization;
+  if (!authorization?.startsWith('Bearer ') || !env.jwtSecret) {
+    return next();
+  }
+
+  try {
+    const token = authorization.slice(7).trim();
+    const decoded = jwt.verify(token, env.jwtSecret);
+    const user = await User.findById(decoded.id);
+    if (user) {
+      request.user = user;
+    }
+  } catch (_error) {
+    // Ignore invalid token and proceed anonymously
+  }
+  return next();
+}

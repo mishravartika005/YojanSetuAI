@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Scheme from '../models/Scheme.js';
+import { evaluateEligibility } from '../services/eligibilityService.js';
 
 function escapeRegex(text) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -66,10 +67,25 @@ export async function getScheme(request, response) {
     return response.status(404).json({ success: false, message: 'Scheme not found' });
   }
 
+  let eligibility = null;
+  if (request.user) {
+    const evaluation = evaluateEligibility(request.user, scheme);
+    eligibility = {
+      score: evaluation.score,
+      status: evaluation.status,
+      statusLabel: evaluation.statusLabel,
+      matchedCriteria: evaluation.matchedCriteria,
+      unmatchedCriteria: evaluation.unmatchedCriteria,
+      missingCriteria: evaluation.missingCriteria,
+      disclaimer: 'Preliminary guidance only. Final eligibility is determined by the relevant government authority.'
+    };
+  }
+
   return response.json({
     success: true,
     data: {
       scheme,
+      eligibility,
     },
   });
 }

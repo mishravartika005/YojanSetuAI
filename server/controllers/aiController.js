@@ -37,7 +37,7 @@ function safeScheme(scheme = {}) {
 }
 
 export async function askQuestion(request, response) {
-	const { message } = request.body || {};
+	const { message, language } = request.body || {};
 
 	if (typeof message !== 'string' || !message.trim()) {
 		return response.status(400).json({ success: false, message: 'Message is required' });
@@ -68,7 +68,7 @@ export async function askQuestion(request, response) {
 		`Deterministic recommendation context:\n${JSON.stringify(recommendations, null, 2)}`,
 	].join('\n\n');
 
-	const answer = await generateAIResponse(prompt);
+	const answer = await generateAIResponse(prompt, { language });
 
 	return response.json({
 		success: true,
@@ -76,4 +76,89 @@ export async function askQuestion(request, response) {
 			message: answer,
 		},
 	});
+}
+
+export async function navigateNeed(request, response) {
+  const { textNeed, selectedCategory } = request.body || {};
+
+  let category = selectedCategory ? selectedCategory.trim().toLowerCase() : null;
+  let keywords = '';
+
+  const allowedCategories = ['agriculture', 'education', 'employment', 'healthcare', 'housing', 'skill_development', 'women'];
+
+  if (textNeed && textNeed.trim()) {
+    const prompt = [
+      'You are a classification assistant for Indian government schemes.',
+      'Analyze the following citizen query expressing a public service need:',
+      `"${textNeed.trim()}"`,
+      '',
+      'Classify it into one of these exact categories: agriculture, education, employment, healthcare, housing, skill_development, women.',
+      'Also extract 1-3 key terms for searching schemes related to this need.',
+      'Respond ONLY with a valid JSON object. Do not include markdown code blocks, backticks, or any explanation.',
+      'Format:',
+      '{ "category": "agriculture", "keywords": "financial support" }'
+    ].join('\n');
+
+    try {
+      const aiResponse = await generateAIResponse(prompt);
+      const cleanJson = aiResponse.replace(/```json/g, '').replace(/```/g, '').trim();
+      const parsed = JSON.parse(cleanJson);
+      if (parsed.category) {
+        category = parsed.category.toLowerCase().trim();
+      }
+      if (parsed.keywords) {
+        keywords = parsed.keywords.trim();
+      }
+    } catch (err) {
+      console.error('Gemini navigator classification failed, falling back to selectedCategory:', err);
+    }
+  }
+
+  // Synonyms/Mapping
+  if (category === 'farming') category = 'agriculture';
+  else if (category === 'women & child welfare') category = 'women';
+  else if (category === 'small business') category = 'employment';
+  else if (category === 'disability support') category = 'healthcare';
+
+  // Query schemes from DB
+  const query = { isActive: true };
+  if (category && allowedCategories.includes(category)) {
+    query.category = category;
+  }
+
+  let schemes = await Scheme.find(query).lean();
+
+  // If we have keywords, calculate match weights
+  if (keywords && schemes.length > 0) {
+    const keywordArray = keywords.toLowerCase().split(/\s+/).filter(k => k.length > 2);
+    if (keywordArray.length > 0) {
+      schemes = schemes.map(scheme => {
+        let weight = 0;
+        const nameLower = scheme.name.toLowerCase();
+        const descLower = (scheme.description || scheme.shortDescription || '').toLowerCase();
+        keywordArray.forEach(word => {
+          if (nameLower.includes(word)) weight += 10;
+          if (descLower.includes(word)) weight += 2;
+        });
+        return { ...scheme, searchWeight: weight };
+      });
+      
+      const matched = schemes.filter(s => s.searchWeight > 0);
+      if (matched.length > 0) {
+        schemes = matched;
+      }
+    }
+  }
+
+  // Run through recommendation evaluation engine
+  const recommendations = getRecommendations(request.user, schemes);
+
+  return response.json({
+    success: true,
+    data: {
+      category,
+      keywords,
+      recommendations,
+    }
+  });
 }

@@ -17,6 +17,7 @@ export function getRecommendations(profile, schemes = []) {
       statusLabel: evaluation.statusLabel,
       matchedCriteria: evaluation.matchedCriteria,
       unmatchedCriteria: evaluation.unmatchedCriteria,
+      missingCriteria: evaluation.missingCriteria,
     };
   });
 
